@@ -1,19 +1,21 @@
 from django.test import TestCase
-from .models import Todo
+from django.contrib.auth.models import User
+from .models import Post
 
 
-class TodoModelTest(TestCase):
+class BlogTest(TestCase):
 
+    # create a user
     @classmethod
     def setUpTestData(cls):
-        Todo.objects.create(title='first todo', body=' a body here')
+        testuser1 = User.objects.create_user(username='testuser1', password='abc123')
+        testuser1.save()
 
-    def test_title_content(self):
-        todo = Todo.objects.get(id=1)
-        expected_object_name = f'{todo.title}'
-        self.assertEquals(expected_object_name, 'first todo')
-
-    def test_body_content(self):
-        todo = Todo.objects.get(id=1)
-        expected_object_name = f'{todo.body}'
-        self.assertEquals(expected_object_name, 'a body here')
+    def test_blog_content(self):
+        post = Post.objects.get(id=1)
+        author = f'{post.author}'
+        title = f'{post.title}'
+        body = f'{post.body}'
+        self.assertEqual(author, 'testuser1')
+        self.assertEqual(title, 'Blog title')
+        self.assertEqual(body, 'Body content...')
